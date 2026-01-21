@@ -3,6 +3,10 @@ import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
 import sys 
+from src.exception import CustomException
+from src.logger import logging
+from src.components.data_transformer import DataTransformation
+from src.components.model_trainer import ModelTrainer
 @dataclass
 class DataIngestionConfig:
     train_data_path: str=os.path.join('artifacts',"train.csv")
@@ -13,7 +17,7 @@ class DataIngestion:
         self.ingestion_config=DataIngestionConfig()
     def initiate_data_ingestion(self):
         try :
-            pd.read('notebook\data\study.csv')
+            df=pd.read('notebook\data\study.csv')
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
             df.to_csv(self.ingestion_config.raw_data_path,index=False,header=True)
             train_set,test_set=train_test_split(df,test_size=0.2,random_state=42)
